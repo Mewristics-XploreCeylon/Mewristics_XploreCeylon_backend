@@ -35,4 +35,26 @@ router.post("/visa_app", authenticate, async (req: Request, res: Response) => {
   }
 });
 
+router.get("/visa_app", authenticate, async (req: Request, res: Response) => {
+  let user: any
+  try {
+    user = await User.findById((req as any).user.userId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+  } catch (error) {
+    res.status(500).send("Error retrieving user");
+  }
+
+  user = user!
+
+  let visaApp = await VisaApplication.findOne({ user: user._id });
+
+  if (!visaApp) {
+    visaApp = await VisaApplication.create({ user: user._id });
+  }
+  
+  res.status(200).json(visaApp);
+});
+
 export default router;
