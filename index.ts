@@ -26,7 +26,7 @@ app.post("/register", async (req: Request, res: Response) => {
     await user.save();
     res.status(201).send("User registered successfully");
   } catch (error) {
-    res.status(500).send("Error registering user");
+    res.status(500).send(`Error registering user: ${error}`);
   }
 });
 
@@ -60,6 +60,9 @@ const authenticate = (req: Request, res: Response, next: Function) => {
     (req as any).user = decoded;
     next();
   } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).send("Token has expired");
+    }
     res.status(400).send("Invalid token");
   }
 };
