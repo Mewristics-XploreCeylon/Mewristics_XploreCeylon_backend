@@ -6,6 +6,7 @@ import User from "./models/user";
 import { UploadedFile } from "express-fileupload";
 import authRoutes from "./routes/auth";
 import authenticate from "./auth";
+import visaAppRoutes from "./routes/visa_app";
 
 dotenv.config();
 
@@ -24,39 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRoutes);
-
-app.get("/protected", authenticate, async (req: Request, res: Response) => {
-  try {
-    const user = await User.findById((req as any).user.userId);
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).send("Error retrieving user");
-  }
-});
-
-app.post('/upload', function(req, res) {
-  let sampleFile;
-  let uploadPath;
-
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
-
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  sampleFile = req.files.sampleFile as UploadedFile;
-  uploadPath = __dirname + '/sample.ping';
-
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv(uploadPath, function(err) {
-    if (err)
-      return res.status(500).send(err);
-
-    res.send('File uploaded!');
-  });
-});
+app.use("/visa_app", visaAppRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
