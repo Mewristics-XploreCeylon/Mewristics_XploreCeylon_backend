@@ -7,6 +7,7 @@ import { UploadedFile } from "express-fileupload";
 import authRoutes from "./routes/auth";
 import authenticate from "./auth";
 import visaAppRoutes from "./routes/visa_app";
+import userProfileRoutes from "./routes/user_profile";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRoutes);
 app.use("/visa_app", visaAppRoutes);
+app.use("/user_profile", userProfileRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
