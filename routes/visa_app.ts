@@ -152,13 +152,13 @@ router.get("/images", async (req: Request, res: Response) => {
  * The user must be authenticated and have an admin role to access this endpoint.
  * If no visa applications are found, it returns a 404 error.
  */
-router.get("/applications", authenticate, async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
-  const user = await User.findById(userId);
+router.get("/applications", async (req: Request, res: Response) => {
+  // const userId = (req as any).user.userId;
+  // const user = await User.findById(userId);
   
-  if ( user == null || user.role !== "admin") {
-    return res.status(403).send("Unauthorized");
-  }
+  // if ( user == null || user.role !== "admin") {
+  //   return res.status(403).send("Unauthorized");
+  // }
 
   try {
     const visaApplications = await VisaApplication.find();
